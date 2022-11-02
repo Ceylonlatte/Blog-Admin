@@ -1,6 +1,7 @@
 import React from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input } from 'antd'
+import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
+import './LoginForm.less'
 
 const LoginForm: React.FC = () => {
   const onFinish = (values: any) => {
@@ -29,6 +30,20 @@ const LoginForm: React.FC = () => {
           type='password'
           placeholder='Password'
         />
+      </Form.Item>
+      <Form.Item>
+        <Row justify={'space-between'}>
+          <Col>
+            <Form.Item name='remember' valuePropName='checked' noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+          </Col>
+          <Col>
+            <a className='login-form-forgot' href=''>
+              Forgot password
+            </a>
+          </Col>
+        </Row>
       </Form.Item>
 
       <Form.Item>
