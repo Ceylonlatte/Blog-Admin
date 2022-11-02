@@ -23,7 +23,6 @@
 
     /* Type Checking */
     "noEmit": true /* 不输出(意思是不编译代码，只执行类型检查) */,
-    "jsx": "react", // react18这里也可以改成react-jsx
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": false /* 不允许使用隐式的 any 类型 */,
     "noImplicitThis": false /*  不允许 this 有隐式的 any 类型，即 this 必须有明确的指向 */,
@@ -31,13 +30,15 @@
 
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "baseUrl": "./" /* 解析非相对模块名的基准目录, 相对模块不会受baseUrl的影响 */,
+    "baseUrl": "." /* 解析非相对模块名的基准目录, 相对模块不会受baseUrl的影响 */,
     "paths": {
       "@/*": ["src/*"] /* 用于设置模块名称到基于baseUrl的路径映射 */
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"] /* lib用于指定要包含在编译中的库文件 */
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"], /* lib用于指定要包含在编译中的库文件 */
+
+    "jsx": "react-jsx"   // 这里不加的话会报'React' refers to a UMD global, but the current file is a module
   },
 
-  "include": ["src"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dist"] // *** 不进行类型检查的文件 ***
 }

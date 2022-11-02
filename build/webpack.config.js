@@ -25,7 +25,14 @@ const getStyleLoaders = (prevLoader) => {
         }
       }
     },
-    prevLoader
+    {
+      loader: prevLoader,
+      options: { 
+        lessOptions: {
+          javascriptEnabled: true,
+        }
+      }
+    }
   ].filter(Boolean)
 }
 
