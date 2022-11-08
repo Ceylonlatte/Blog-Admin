@@ -11,7 +11,7 @@ const Login: React.FC = () => {
         <img className='login__image' src={loginBg} alt='' />
         <div className='login__form'>
           <Typography.Title level={2} style={{ textAlign: 'center', marginBottom: '40px' }}>
-            Ant Design Pro
+            My Blog Admin
           </Typography.Title>
           <LoginForm />
         </div>

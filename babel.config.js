@@ -15,5 +15,13 @@ module.exports = {
         corejs: 3,
       },
     ],
+    [
+      'import',
+      {
+        libraryName: 'antd', // 包名
+        libraryDirectory: 'lib', // 目录，默认 lib
+        style: true, // 是否引入 style
+      },
+    ],
   ].filter(Boolean),
 }
