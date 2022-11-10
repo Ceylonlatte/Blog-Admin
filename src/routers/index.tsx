@@ -1,7 +1,20 @@
 import React from 'react'
 import { RouteObject } from '@/routers/interface'
 import { Navigate, useRoutes } from 'react-router-dom'
-import Login from '@/views/login'
+import Login from '@/containers/Login'
+
+// * 导入所有router
+const metaRouters = require.context('./modules', true, /\.tsx$/)
+
+console.log('metaRouters', metaRouters)
+
+// * 处理路由
+export const routerArray: RouteObject[] = []
+
+metaRouters.keys().forEach((modulePath) => {
+  routerArray.push(...metaRouters(modulePath).default)
+})
+console.log(routerArray)
 
 export const rootRouter: RouteObject[] = [
   {
@@ -17,7 +30,14 @@ export const rootRouter: RouteObject[] = [
       key: 'login',
     },
   },
+  ...routerArray,
+  {
+    path: '*',
+    element: <Navigate to='/404' />,
+  },
 ]
+
+console.log(rootRouter)
 
 const Router = () => {
   const routes = useRoutes(rootRouter)

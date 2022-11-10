@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { rootRouter } from '@/routers/index'
-import { searchRoute } from '@/utils'
+import { LocalCache, searchRoute } from '@/utils'
+import { Token } from '@/constant'
 
 const AuthRouter = (props: { children: JSX.Element }) => {
   const { pathname } = useLocation()
@@ -11,11 +12,9 @@ const AuthRouter = (props: { children: JSX.Element }) => {
   if (!route.meta?.requiresAuth) return props.children
 
   // * 判断是否有Token
-  // const token = store.getState().global.token;
-  // if (!token) return <Navigate to="/login" replace />;
+  const token = LocalCache.getItem(Token.ACCESS_TOKEN)
+  if (!token) return <Navigate to='/login' replace />
 
-  console.log(route)
-  console.log(rootRouter)
   // * 当前账号有权限返回 Router，正常访问页面
   return props.children
 }

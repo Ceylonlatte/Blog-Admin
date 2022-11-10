@@ -5,18 +5,24 @@ import './LoginForm.less'
 import { LoginParam } from '@/types'
 import { Login } from '@/api/user'
 import { LocalCache } from '@/utils'
+import { HOME_URL, Token } from '@/constant'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm: React.FC = () => {
   const [loading, setloading] = useState(false)
+  const navigate = useNavigate()
+
   const onFinish = async (loginForm: LoginParam) => {
     try {
       setloading(true)
       const { refreshToken, accessToken } = await Login(loginForm)
 
-      LocalCache.setItem('accessToken', accessToken)
-      LocalCache.setItem('refreshToken', refreshToken)
+      LocalCache.setItem(Token.ACCESS_TOKEN, accessToken)
+      LocalCache.setItem(Token.REFRESH_TOKEN, refreshToken)
 
       message.success('登录成功')
+
+      navigate(HOME_URL)
     } catch (error) {
       console.log(error)
     } finally {
