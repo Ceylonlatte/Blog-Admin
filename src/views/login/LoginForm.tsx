@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Col, Form, Input, Row } from 'antd'
+import { Button, Checkbox, Col, Form, Input, message, Row } from 'antd'
 import './LoginForm.less'
+import { LoginParam } from '@/types'
+import { Login } from '@/api/user'
+import { LocalCache } from '@/utils'
 
 const LoginForm: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values)
+  const [loading, setloading] = useState(false)
+  const onFinish = async (loginForm: LoginParam) => {
+    try {
+      setloading(true)
+      const { refreshToken, accessToken } = await Login(loginForm)
+
+      LocalCache.setItem('accessToken', accessToken)
+      LocalCache.setItem('refreshToken', refreshToken)
+
+      message.success('登录成功')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setloading(false)
+    }
   }
 
   return (
@@ -15,10 +31,7 @@ const LoginForm: React.FC = () => {
       initialValues={{ remember: true }}
       onFinish={onFinish}
     >
-      <Form.Item
-        name='username'
-        rules={[{ required: true, message: 'Please input your Username!' }]}
-      >
+      <Form.Item name='name' rules={[{ required: true, message: 'Please input your Username!' }]}>
         <Input prefix={<UserOutlined className='site-form-item-icon' />} placeholder='Username' />
       </Form.Item>
       <Form.Item
@@ -47,7 +60,7 @@ const LoginForm: React.FC = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button type='primary' htmlType='submit' className='login-form-button'>
+        <Button loading={loading} type='primary' htmlType='submit' className='login-form-button'>
           Log in
         </Button>
         Or <a href=''>register now!</a>
