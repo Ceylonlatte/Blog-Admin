@@ -6,3 +6,7 @@ declare module '*.gif'
 declare module '*.bmp'
 declare module '*.tiff'
 declare module '*.axios'
+declare module '*.module.less' {
+  const classes: { [className: string]: string }
+  export default classes
+}

@@ -15,7 +15,24 @@ const getStyleLoaders = (prevLoader) => {
     'style-loader',
     // 开发环境缓存css文件
     !isEnvProduction && 'cache-loader',
-    'css-loader',
+    {
+      loader: 'css-loader',
+      options: {
+        modules: {
+          auto: resourcePath => {
+            // 排除 antd样式
+            if (/antd/.test(resourcePath)) {
+              return false
+            }
+            return true
+          },
+          localIdentName: isEnvProduction ? '[hash:base64:5]' : '[name]__[local]--[hash:base64:5]',
+           // 驼峰化对象，并保留原始key 比如 userAge user-age都可用
+           exportLocalsConvention: 'camelCaseOnly',
+        },
+        importLoaders: 1,
+      },
+    },
     {
       // 处理css兼容问题
       loader: 'postcss-loader',

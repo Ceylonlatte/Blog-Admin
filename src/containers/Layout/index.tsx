@@ -1,6 +1,16 @@
+import { Layout } from 'antd'
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
-const Layout: React.FC = () => {
-  return <div>layout</div>
+const { Header, Content, Footer, Sider } = Layout
+
+const AppLayout: React.FC = () => {
+  return (
+    <Layout>
+      <Content>
+        <Outlet></Outlet>
+      </Content>
+    </Layout>
+  )
 }
-export default Layout
+export default AppLayout
