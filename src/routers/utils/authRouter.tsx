@@ -1,3 +1,4 @@
+import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { rootRouter } from '@/routers/index'
 import { LocalCache, searchRoute } from '@/utils'

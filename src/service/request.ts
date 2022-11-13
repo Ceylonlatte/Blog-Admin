@@ -16,6 +16,8 @@ service.interceptors.request.use(
     console.log('请求成功拦截器', config)
     const accessToken = LocalCache.getItem(Token.ACCESS_TOKEN)
 
+    console.log('accessToken', accessToken)
+
     if (accessToken) {
       config.headers = {
         ...config.headers,
@@ -36,14 +38,18 @@ service.interceptors.response.use(
     return response.data.data
   },
   (error) => {
+    if (!error.response) {
+      message.error('服务器出错啦~')
+      return Promise.reject(error)
+    }
     const {
-      response: { data },
+      response: { data = {} },
     } = error
 
     const errorMessage =
       data.message instanceof Array ? data.message[0].message : data.message ?? error.message
 
-    message.error(errorMessage ?? '请求错误')
+    message.error(errorMessage ?? '未知错误')
 
     console.log('响应失败拦截器', error)
     console.log(errorMessage)

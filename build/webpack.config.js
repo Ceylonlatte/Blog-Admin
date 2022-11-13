@@ -9,29 +9,18 @@ const isEnvProduction = process.env.NODE_ENV === 'production'
 
 const env = getClientEnvironment();
 
-const getStyleLoaders = (prevLoader) => {
-  return [
-    // 生产环境将css单独抽取成文件，开发环境直接只用 style-loader
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
+
+// common function to get style loaders
+const getStyleLoaders = (cssOptions, preProcessor) => {
+  const loaders = [
     'style-loader',
-    // 开发环境缓存css文件
-    !isEnvProduction && 'cache-loader',
     {
-      loader: 'css-loader',
-      options: {
-        modules: {
-          auto: resourcePath => {
-            // 排除 antd样式
-            if (/antd/.test(resourcePath)) {
-              return false
-            }
-            return true
-          },
-          localIdentName: isEnvProduction ? '[hash:base64:5]' : '[name]__[local]--[hash:base64:5]',
-           // 驼峰化对象，并保留原始key 比如 userAge user-age都可用
-           exportLocalsConvention: 'camelCaseOnly',
-        },
-        importLoaders: 1,
-      },
+      loader: require.resolve('css-loader'),
+      options: cssOptions,
     },
     {
       // 处理css兼容问题
@@ -39,19 +28,61 @@ const getStyleLoaders = (prevLoader) => {
       options: {
         postcssOptions: {
           plugins: ['postcss-preset-env']
-        }
+        },
       }
     },
-    {
-      loader: prevLoader,
-      options: { 
+  ];
+  if (preProcessor) {
+    loaders.push({
+      loader: require.resolve(preProcessor),
+      options: {
         lessOptions: {
           javascriptEnabled: true,
-        }
       }
-    }
-  ].filter(Boolean)
-}
+      }
+     
+    });
+  }
+  return loaders;
+};
+
+
+// const getStyleLoaders = (prevLoader, module) => {
+//   return [
+//     // 生产环境将css单独抽取成文件，开发环境直接只用 style-loader
+//     'style-loader',
+//     // 开发环境缓存css文件
+//     !isEnvProduction && 'cache-loader',
+//     {
+//       loader: 'css-loader',
+//       options: {
+//         modules: {
+//           localIdentName: isEnvProduction ? '[hash:base64:5]' : '[name]__[local]--[hash:base64:5]',
+//            // 驼峰化对象，并保留原始key 比如 userAge user-age都可用
+//            exportLocalsConvention: 'camelCaseOnly',
+//         },
+//         importLoaders: 1,
+//       },
+//     },
+//     {
+//       // 处理css兼容问题
+//       loader: 'postcss-loader',
+//       options: {
+//         postcssOptions: {
+//           plugins: ['postcss-preset-env']
+//         }
+//       }
+//     },
+//     {
+//       loader: prevLoader,
+//       options: { 
+//         lessOptions: {
+//           javascriptEnabled: true,
+//         }
+//       }
+//     }
+//   ].filter(Boolean)
+// }
 
 
 
@@ -84,8 +115,48 @@ module.exports =  {
         use: ['babel-loader'],
       },
       {
-        test: /.(css|less)$/, // 匹配 css和less 文件
-        use: getStyleLoaders('less-loader'),
+        test: cssRegex,
+        exclude: cssModuleRegex,
+        use: getStyleLoaders({
+          importLoaders: 1,
+        }),
+        sideEffects: true,
+      },
+      {
+        test: cssModuleRegex,
+        use: getStyleLoaders({
+          importLoaders: 1,
+          modules: {
+            localIdentName: isEnvProduction ? '[hash:base64:5]' : '[name]__[local]--[hash:base64:5]',
+             // 驼峰化对象，并保留原始key 比如 userAge user-age都可用
+             exportLocalsConvention: 'camelCaseOnly',
+          },
+        }),
+      },
+      {
+        test: lessRegex,
+        exclude: lessModuleRegex,
+        use: getStyleLoaders(
+          {
+            importLoaders: 2,
+          },
+          'less-loader'
+        ),
+        sideEffects: true,
+      },
+      {
+        test: lessModuleRegex,
+        use: getStyleLoaders(
+          {
+            importLoaders: 2,
+            modules: {
+              localIdentName: isEnvProduction ? '[hash:base64:5]' : '[name]__[local]--[hash:base64:5]',
+               // 驼峰化对象，并保留原始key 比如 userAge user-age都可用
+               exportLocalsConvention: 'camelCaseOnly',
+            },
+          },
+          'less-loader'
+        ),
       },
       {
         test:/.(png|jpg|jpeg|gif|svg)$/, // 匹配图片文件

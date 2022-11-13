@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Col, Form, Input, message, Row } from 'antd'
-import './LoginForm.less'
+import styles from './LoginForm.module.less'
 import { LoginParam } from '@/types'
 import { Login } from '@/api/user'
 import { LocalCache } from '@/utils'
@@ -33,7 +33,7 @@ const LoginForm: React.FC = () => {
   return (
     <Form
       name='normal_login'
-      className='login-form'
+      className={styles.loginForm}
       initialValues={{ remember: true }}
       onFinish={onFinish}
     >
