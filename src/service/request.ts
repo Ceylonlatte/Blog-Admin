@@ -2,7 +2,7 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { message } from 'antd'
-import { LocalCache } from '@/utils'
+import { LocalCache, refreshToken } from '@/utils'
 import { Token } from '@/constant'
 
 const service: AxiosInstance = axios.create({
@@ -37,22 +37,39 @@ service.interceptors.response.use(
     console.log('响应成功拦截器', response.data.data)
     return response.data.data
   },
-  (error) => {
+  async (error) => {
+    console.log('响应失败拦截器', error)
+
     if (!error.response) {
       message.error('服务器出错啦~')
       return Promise.reject(error)
     }
-    const {
-      response: { data = {} },
-    } = error
 
-    const errorMessage =
-      data.message instanceof Array ? data.message[0].message : data.message ?? error.message
+    const config = error?.config
 
-    message.error(errorMessage ?? '未知错误')
+    console.log('config', config)
 
-    console.log('响应失败拦截器', error)
-    console.log(errorMessage)
+    if (error?.response?.status === 401 && !config?.sent) {
+      config.sent = true
+      const result = await refreshToken()
+
+      if (result?.accessToken) {
+        config.headers = {
+          ...config.headers,
+          authorization: `Bearer ${result?.accessToken}`,
+        }
+      }
+
+      return service(config)
+    }
+
+    const errorMsg =
+      error.response.data.message instanceof Array
+        ? error.response.data.message[0].message
+        : error.response.data.message ?? error.message
+
+    message.error(errorMsg ?? '未知错误')
+
     return Promise.reject(error)
   },
 )
