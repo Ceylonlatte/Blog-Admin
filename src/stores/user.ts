@@ -1,11 +1,10 @@
-import { UserInfoType } from '@/types'
-import { atom } from 'recoil'
+import { getUserInfo } from '@/api'
+import { selector } from 'recoil'
 
-const defalutValue = {
-  name: 'Anonyme',
-  avatar: '',
-}
-export const userInfoAtom = atom<UserInfoType>({
-  key: 'userInfo',
-  default: defalutValue,
+export const userInfoSelector = selector({
+  key: 'userInfoSelector',
+  get: async () => {
+    const response = await getUserInfo()
+    return response
+  },
 })

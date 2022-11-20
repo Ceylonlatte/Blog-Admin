@@ -1,16 +1,16 @@
 import { Request } from '@/service'
-import { LoginParam, LoginType } from '@/types'
+import { LoginParam, LoginResponseData, UserInfoParam } from '@/types'
 
-export const Login = (param: LoginParam) => {
-  return Request<any, LoginType>({
+export const login = (param: LoginParam) => {
+  return Request<any, LoginResponseData>({
     url: '/auth/login',
     method: 'post',
     data: param,
   })
 }
 
-export const GetUserInfo = () => {
-  return Request<any, LoginType>({
+export const getUserInfo = () => {
+  return Request<any, UserInfoParam>({
     url: '/auth/getUserInfo',
     method: 'get',
   })

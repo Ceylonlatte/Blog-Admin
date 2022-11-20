@@ -3,12 +3,12 @@ export interface LoginParam {
   password: string
 }
 
-export interface LoginType {
+export interface LoginResponseData {
   accessToken: string
   refreshToken: string
 }
 
-export interface UserInfoType {
+export interface UserInfoParam {
   name: string
   avatar: string
 }

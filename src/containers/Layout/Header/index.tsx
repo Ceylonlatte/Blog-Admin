@@ -1,23 +1,14 @@
-import { GetUserInfo } from '@/api'
-import { userInfoAtom } from '@/stores'
+import { userInfoSelector } from '@/stores'
 import { Layout } from 'antd'
-import React, { useEffect } from 'react'
-import { useRecoilState } from 'recoil'
+import React from 'react'
+import { useRecoilValue } from 'recoil'
 import AvatarIcon from './components/AvatarIcon'
 import CollapseIcon from './components/CollapseIcon'
 import styles from './index.module.less'
 
 const LayoutHeader = () => {
   const { Header } = Layout
-  const [userInfo] = useRecoilState(userInfoAtom)
-  const user = useEffect(() => {
-    const getUserData = async () => {
-      await GetUserInfo()
-    }
-    getUserData().catch(console.error)
-  }, [])
-
-  console.log(user)
+  const userInfo = useRecoilValue(userInfoSelector)
 
   return (
     <Header className={styles.layoutHeader}>

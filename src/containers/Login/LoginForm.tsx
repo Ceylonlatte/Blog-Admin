@@ -3,7 +3,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Col, Form, Input, message, Row } from 'antd'
 import styles from './LoginForm.module.less'
 import { LoginParam } from '@/types'
-import { Login } from '@/api/user'
+import { login } from '@/api/user'
 import { LocalCache } from '@/utils'
 import { HOME_URL, Token } from '@/constant'
 import { useNavigate } from 'react-router-dom'
@@ -15,7 +15,7 @@ const LoginForm: React.FC = () => {
   const onFinish = async (loginForm: LoginParam) => {
     try {
       setloading(true)
-      const { refreshToken, accessToken } = await Login(loginForm)
+      const { refreshToken, accessToken } = await login(loginForm)
 
       LocalCache.setItem(Token.ACCESS_TOKEN, accessToken)
       LocalCache.setItem(Token.REFRESH_TOKEN, refreshToken)
