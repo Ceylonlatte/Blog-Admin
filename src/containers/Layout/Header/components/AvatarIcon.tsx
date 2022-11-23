@@ -4,13 +4,19 @@ import { Avatar, Dropdown, Modal } from 'antd'
 import { useRecoilValue } from 'recoil'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { userInfoSelector } from '@/stores'
-import { HOME_URL } from '@/constant'
+import { AVATAR_DEFAULT, HOME_URL } from '@/constant'
 import { LocalCache } from '@/utils'
 
 const AvatarIcon: React.FC = () => {
   const navigate = useNavigate()
 
+  const [avatarImage, setAvatarImage] = useState(AVATAR_DEFAULT)
+
   const { avatar } = useRecoilValue(userInfoSelector)
+
+  useEffect(() => {
+    if (avatar) setAvatarImage(avatar)
+  }, [avatar])
 
   // 退出登录
   const logout = () => {
@@ -35,7 +41,7 @@ const AvatarIcon: React.FC = () => {
   return (
     <div>
       <Dropdown menu={{ items }} placement='bottom' arrow>
-        <Avatar size='large' src={avatar} />
+        <Avatar size='large' src={avatarImage} />
       </Dropdown>
     </div>
   )

@@ -1,24 +1,24 @@
 import React from 'react'
 import Layout from '@/containers/Layout'
 import { RouteObject } from '../interface'
-import Home from '@/containers/Home'
+import Category from '@/containers/Category'
 
-const HomeRouter: RouteObject[] = [
+const CategoryRouter: RouteObject[] = [
   {
     element: <Layout />,
     path: '/',
     children: [
       {
-        path: '/home',
-        element: <Home />,
+        element: <Category />,
+        path: '/category',
         meta: {
           requiresAuth: true,
-          title: '首页',
-          key: 'home',
+          title: '栏目',
+          key: 'category',
         },
       },
     ],
   },
 ]
 
-export default HomeRouter
+export default CategoryRouter

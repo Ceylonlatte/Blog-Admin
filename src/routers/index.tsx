@@ -11,9 +11,12 @@ console.log('metaRouters', metaRouters)
 // * 处理路由
 export const routerArray: RouteObject[] = []
 
-metaRouters.keys().forEach((modulePath) => {
-  routerArray.push(...metaRouters(modulePath).default)
-})
+metaRouters
+  .keys()
+  .reverse()
+  .forEach((modulePath) => {
+    routerArray.push(...metaRouters(modulePath).default)
+  })
 console.log(routerArray)
 
 export const rootRouter: RouteObject[] = [
