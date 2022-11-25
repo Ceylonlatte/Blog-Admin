@@ -1,25 +1,25 @@
 import React from 'react'
 import Layout from '@/containers/Layout'
 import { RouteObject } from '../interface'
-import Home from '@/containers/Home'
+import Article from '@/containers/Article'
 
-const HomeRouter: RouteObject[] = [
+const ArticleRouter: RouteObject[] = [
   {
     element: <Layout />,
     path: '/',
     children: [
       {
-        path: '/home',
-        icon: 'HomeOutlined',
-        element: <Home />,
+        element: <Article />,
+        path: '/article',
+        icon: 'ReadOutlined',
         meta: {
           requiresAuth: true,
-          title: '首页',
-          key: 'home',
+          title: '文章',
+          key: 'article',
         },
       },
     ],
   },
 ]
 
-export default HomeRouter
+export default ArticleRouter

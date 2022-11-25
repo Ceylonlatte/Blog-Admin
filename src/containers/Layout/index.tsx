@@ -14,7 +14,7 @@ const AppLayout: React.FC = () => {
 
   return (
     <Layout className={style.baseLayout}>
-      <Sider trigger={null} collapsible collapsed={collapse}>
+      <Sider width={220} trigger={null} collapsible collapsed={collapse}>
         <LayoutMenu />
       </Sider>
       <Layout>

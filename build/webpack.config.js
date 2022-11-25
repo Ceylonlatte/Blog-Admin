@@ -37,6 +37,13 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
       loader: require.resolve(preProcessor),
       options: {
         lessOptions: {
+          modifyVars: {
+            'primary-color': 'rgb(145, 85, 253)',
+            'layout-header-background': 'rgb(255, 255, 255)',
+            'antd-layout': 'rgb(255, 255, 255)',
+            '@border-color-split': 'rgba(58, 53, 65, 0.12)',
+            '@menu-highlight-color': 'rgba(58, 53, 65, 0.87)',
+          },
           javascriptEnabled: true,
       }
       }

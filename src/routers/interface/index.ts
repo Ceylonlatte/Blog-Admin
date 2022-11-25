@@ -10,6 +10,7 @@ export interface RouteObject {
   children?: RouteObject[]
   element?: React.ReactNode
   index?: false
+  icon?: string
   path?: string
   meta?: MetaProps
   isLink?: string

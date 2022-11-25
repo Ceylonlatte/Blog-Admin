@@ -11,4 +11,5 @@ export interface LoginResponseData {
 export interface UserInfoParam {
   name: string
   avatar: string
+  [key: string]: string
 }

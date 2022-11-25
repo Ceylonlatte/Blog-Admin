@@ -11,6 +11,7 @@ const CategoryRouter: RouteObject[] = [
       {
         element: <Category />,
         path: '/category',
+        icon: 'AppstoreAddOutlined',
         meta: {
           requiresAuth: true,
           title: '栏目',

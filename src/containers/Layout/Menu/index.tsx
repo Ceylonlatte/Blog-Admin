@@ -4,6 +4,9 @@ import type { MenuProps } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { MENU_DEFAULT_SELECT_KEY } from '@/constant'
+import style from './menu.module.less'
+import * as Icons from '@ant-design/icons'
+
 const LayoutMenu: React.FC = () => {
   const navigate = useNavigate()
 
@@ -28,6 +31,13 @@ const LayoutMenu: React.FC = () => {
     } as MenuItem
   }
 
+  const customIcons: { [key: string]: any } = Icons
+
+  const addIcon = (name: string) => {
+    console.log(customIcons)
+    return React.createElement(customIcons[name])
+  }
+
   const reGroupMenusItems = (menus, newArr = []) => {
     const hasChidlren = (data) => {
       return Array.isArray(data.children) && data.children.length > 0
@@ -39,7 +49,11 @@ const LayoutMenu: React.FC = () => {
       const [childFirstItem, ...childs] = menuItem.children
 
       newArr.push({
-        ...getItem(childFirstItem.meta.title, childFirstItem.path),
+        ...getItem(
+          childFirstItem.meta.title,
+          childFirstItem.path,
+          childFirstItem.icon ? addIcon(childFirstItem.icon) : null,
+        ),
         children: childs.length > 0 ? reGroupMenusItems(childs) : null,
       })
     })
@@ -70,9 +84,8 @@ const LayoutMenu: React.FC = () => {
   }
 
   return (
-    <div className='menu'>
+    <div className={style.menu}>
       <Menu
-        theme='dark'
         mode='inline'
         triggerSubMenuAction='click'
         selectedKeys={selectedKeys}
