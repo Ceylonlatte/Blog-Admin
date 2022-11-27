@@ -43,6 +43,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
             'antd-layout': 'rgb(255, 255, 255)',
             '@border-color-split': 'rgba(58, 53, 65, 0.12)',
             '@menu-highlight-color': 'rgba(58, 53, 65, 0.87)',
+            '@border-radius-base': '6px'
           },
           javascriptEnabled: true,
       }

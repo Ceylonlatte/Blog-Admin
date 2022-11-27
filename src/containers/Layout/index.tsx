@@ -10,7 +10,7 @@ import style from './layout.module.less'
 const { Sider, Content } = Layout
 
 const AppLayout: React.FC = () => {
-  const [collapse, setCollapse] = useRecoilState(collapseAtom)
+  const [collapse] = useRecoilState(collapseAtom)
 
   return (
     <Layout className={style.baseLayout}>
@@ -19,7 +19,7 @@ const AppLayout: React.FC = () => {
       </Sider>
       <Layout>
         <LayoutHeader />
-        <Content>
+        <Content className={style.content}>
           <Outlet></Outlet>
         </Content>
       </Layout>
