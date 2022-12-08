@@ -48,17 +48,21 @@ const LayoutMenu: React.FC = () => {
 
       const [childFirstItem, ...childs] = menuItem.children
 
+      const filterChildren = childs.filter((item) => {
+        return !item.meta.hidden
+      })
+
+      console.log('filterChildren', filterChildren)
+
       newArr.push({
         ...getItem(
           childFirstItem.meta.title,
           childFirstItem.path,
           childFirstItem.icon ? addIcon(childFirstItem.icon) : null,
         ),
-        children: childs.length > 0 ? reGroupMenusItems(childs) : null,
+        children: filterChildren.length > 0 ? reGroupMenusItems(childs) : null,
       })
     })
-
-    console.log(newArr)
 
     return newArr
   }

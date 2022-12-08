@@ -1,23 +1,15 @@
 @import '~antd/es/style/themes/default.less';
 
-.category {
+.article {
   border: 1px solid @border-color-split;
   border-radius: @border-radius-base;
-  &-header {
+  .header {
     padding: 20px 20px 12px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     :global(.@{ant-prefix}-btn) {
       box-shadow: rgb(58 53 65 / 42%) 0px 4px 8px -4px;
-    }
-  }
-  &-list {
-    border: none;
-    &-item {
-      & > span {
-        color: rgba(58, 53, 65, 0.87);
-      }
     }
   }
   :global(.@{ant-prefix}-btn-sm) {

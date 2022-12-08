@@ -1,0 +1,1 @@
+export const CREATE_ARTICLE_TITLE = 'CREATE ARTICLE'

@@ -3,6 +3,7 @@ export interface MetaProps {
   requiresAuth?: boolean
   title: string
   key?: string
+  hidden?: boolean
 }
 
 export interface RouteObject {

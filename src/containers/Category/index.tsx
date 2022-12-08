@@ -6,7 +6,13 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { Button, message, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import CategoryForm from './CategoryForm'
-import { CREATE_CATEGORY_TITLE, ADD_STATUS_DATA, EDIT_STATUS_DATA } from '@/constant'
+import {
+  CREATE_CATEGORY_TITLE,
+  ADD_STATUS_DATA,
+  EDIT_STATUS_DATA,
+  DELETE_BTN_TEXT,
+  EDIT_BTN_TEXT,
+} from '@/constant'
 
 export interface StatusDataType {
   status: number
@@ -40,12 +46,28 @@ const Category: React.FC = () => {
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <DeleteOutlined
+          <Button
+            icon={<DeleteOutlined />}
+            shape='round'
+            size='small'
             onClick={() => {
               onDelete(record.id)
             }}
-          />
-          <EditOutlined onClick={() => onEdit(record)} />
+          >
+            {DELETE_BTN_TEXT}
+          </Button>
+
+          <Button
+            type='primary'
+            shape='round'
+            icon={<EditOutlined />}
+            size='small'
+            onClick={() => {
+              onEdit(record)
+            }}
+          >
+            {EDIT_BTN_TEXT}
+          </Button>
         </Space>
       ),
     },
