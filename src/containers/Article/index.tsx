@@ -1,6 +1,11 @@
 import { deleteArticle, fetchArticleList } from '@/api'
-import { CREATE_ARTICLE_TITLE, DELETE_BTN_TEXT, EDIT_BTN_TEXT } from '@/constant'
-import { ArticleListResponseData } from '@/types'
+import {
+  CREATE_ARTICLE_TITLE,
+  CREATE_ARTICLE_URL,
+  DELETE_BTN_TEXT,
+  EDIT_BTN_TEXT,
+} from '@/constant'
+import { ArticleListItem, ArticleListResponseData } from '@/types'
 import { Button, message, Space, Table } from 'antd'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import React, { useEffect, useState } from 'react'
@@ -13,10 +18,8 @@ const Article: React.FC = () => {
     pagination?: TablePaginationConfig
   }
 
-  type DataType = Pick<ArticleListResponseData, 'data'>
-
   const navigate = useNavigate()
-  const [data, setData] = useState([])
+  const [data, setData] = useState<ArticleListResponseData['data'] | []>([])
   const [loading, setLoading] = useState(false)
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
@@ -24,7 +27,7 @@ const Article: React.FC = () => {
       pageSize: 10,
     },
   })
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<ArticleListItem> = [
     {
       title: 'Id',
       dataIndex: 'id',
@@ -32,7 +35,7 @@ const Article: React.FC = () => {
     {
       title: 'Title',
       dataIndex: 'title',
-      render: (_, record: any) => <a onClick={() => linkDetailPage(record)}>{record.title}</a>,
+      render: (_, record) => <a onClick={() => linkDetailPage(record)}>{record.title}</a>,
     },
     {
       title: 'CreatedAt',
@@ -85,8 +88,7 @@ const Article: React.FC = () => {
         page: tableParams.pagination.current,
         pageSize: tableParams.pagination.pageSize,
       })
-      const { meta, data = [] } = res
-      console.log(res)
+      const { meta, data } = res
       setTableParams({
         ...tableParams,
         pagination: {
@@ -109,11 +111,11 @@ const Article: React.FC = () => {
   }
 
   const onCreateArticle = () => {
-    console.log('create')
+    navigate(CREATE_ARTICLE_URL)
   }
 
   const onEditArticle = (record) => {
-    console.log(record)
+    linkDetailPage(record)
   }
 
   const onDeleteArticle = async (articleId) => {
