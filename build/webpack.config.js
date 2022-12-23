@@ -4,8 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isEnvProduction = process.env.NODE_ENV === 'production'
+const isEnvDevelopment = process.env.NODE_ENV === 'development';
 
 const env = getClientEnvironment();
 
@@ -17,7 +19,11 @@ const lessModuleRegex = /\.module\.less$/;
 // common function to get style loaders
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
-    'style-loader',
+    isEnvDevelopment && require.resolve('style-loader'),
+      isEnvProduction && {
+        loader: MiniCssExtractPlugin.loader,
+        options: {}
+    },
     {
       loader: require.resolve('css-loader'),
       options: cssOptions,
@@ -31,7 +37,7 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         },
       }
     },
-  ];
+  ].filter(Boolean);
   if (preProcessor) {
     loaders.push({
       loader: require.resolve(preProcessor),
@@ -105,7 +111,8 @@ module.exports =  {
     path: paths.appBuild,
     filename: isEnvProduction
     ? 'static/js/[name].[contenthash:8].js'
-    : 'static/js/bundle.js',
+    : 'static/js/[name].js',
+    chunkFilename: isEnvProduction ? 'static/js/[name].[contenthash:10].chunk.js' : 'static/js/[name].chunk.js',
     clean: true, // webpack4需要配置clean-webpack-plugin来删除dist文件,webpack5内置了
     publicPath: '/' // 打包后文件的公共前缀路径
   },
@@ -211,9 +218,28 @@ module.exports =  {
     new HtmlWebpackPlugin({
       template: path.join(paths.appPublic, 'index.html')
     }),
+    isEnvProduction &&
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: 'static/css/[name].[contenthash:8].css',
+      chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+    }),
     new webpack.DefinePlugin(env.stringified),
     !isEnvProduction && new ReactRefreshWebpackPlugin()
   ].filter(Boolean),
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        reactVendor: {
+          test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+          name: 'vendor-react',
+          chunks: 'all',
+        },
+      },
+    },
+  },
 
   cache: {
     type: 'filesystem', // 使用文件缓存
