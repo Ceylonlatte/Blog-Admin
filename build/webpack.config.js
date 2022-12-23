@@ -5,8 +5,11 @@ const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin'); 
 
-const isEnvProduction = process.env.NODE_ENV === 'production'
+const isEnvProduction = process.env.NODE_ENV === 'production';
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 
 const env = getClientEnvironment();
@@ -226,18 +229,40 @@ module.exports =  {
       chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
     }),
     new webpack.DefinePlugin(env.stringified),
-    !isEnvProduction && new ReactRefreshWebpackPlugin()
+    !isEnvProduction && new ReactRefreshWebpackPlugin(),
+    isEnvProduction && new CompressionPlugin(), 	
   ].filter(Boolean),
 
+
+
   optimization: {
+    runtimeChunk: true,
+    moduleIds: 'deterministic',
+    usedExports:true,
+    minimize:true,
+    minimizer: [
+      new CssMinimizerPlugin(),
+      new TerserPlugin({
+           parallel: 4,
+      })
+    ],
     splitChunks: {
+      chunks: 'all',
       cacheGroups: {
-        reactVendor: {
-          test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
-          name: 'vendor-react',
-          chunks: 'all',
+        // react react-dom react-router-dom 一起打包
+        react: {
+          test: /[\\/]node_modules[\\/]react(.*)?[\\/]/,
+          name:'chunk-react',
+          // 优先级，打包 react 相关依赖时，不会被打入 node_modules 中的chunk
+          priority: 10
         },
-      },
+        // node_modules 单独打包
+        lib: {
+          test: /[\\/]node_modules[\\/]/,
+          name:'chunk-libs',
+          priority: 1
+        }
+      }
     },
   },
 
