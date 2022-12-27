@@ -117,7 +117,7 @@ module.exports =  {
     : 'static/js/[name].js',
     chunkFilename: isEnvProduction ? 'static/js/[name].[contenthash:10].chunk.js' : 'static/js/[name].chunk.js',
     clean: true, // webpack4需要配置clean-webpack-plugin来删除dist文件,webpack5内置了
-    publicPath: '/' // 打包后文件的公共前缀路径
+    publicPath: '/admin/' // 打包后文件的公共前缀路径
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js'], // add .tsx, .ts
