@@ -8,7 +8,7 @@ const App = () => {
   return (
     <RecoilRoot>
       <Suspense fallback={<div>Loading...</div>}>
-        <BrowserRouter>
+        <BrowserRouter basename='/admin/'>
           <AuthRouter>
             <Router />
           </AuthRouter>
